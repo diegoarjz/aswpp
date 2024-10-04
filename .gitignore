@@ -1,0 +1,4 @@
+build
+
+third_party/AngelScript/sdk
+third_party/AngelScript/*.zip
