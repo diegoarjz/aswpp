@@ -1,5 +1,7 @@
 include(ExternalProject)
 
+#----------------------------------------
+# Download and unzip AngelScript
 set(AngelScript_URL
   "https://www.angelcode.com/angelscript/sdk/files/angelscript_${AngelScript_VERSION}.zip"
 )
@@ -37,4 +39,16 @@ add_custom_target(
   DEPENDS
     ${AngelScriptZip_DST}
     ${AngelScript_DST}
+)
+
+#----------------------------------------
+# Build AngelScript library
+
+# We want to be as flexible as possible with any changes in source files in the
+# zip so we glob everything. We won't be making changes to these files anyway.
+file(GLOB AngelScript_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sdk/angelscript/source/*.cpp)
+add_library(
+  AngelScript
+  STATIC
+    ${AngelScript_SOURCES}
 )
