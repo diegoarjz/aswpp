@@ -52,6 +52,7 @@ add_library(
   STATIC
     ${AngelScript_SOURCES}
 )
+set_property(TARGET AngelScript PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 file(GLOB AngelScript_AddOn_ScriptBuilder_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sdk/add_on/scriptbuilder/*.cpp)
 add_library(
@@ -64,3 +65,4 @@ target_include_directories(
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/sdk/angelscript/include
 )
+set_property(TARGET AngelScript_ScriptBuilder_AddOn PROPERTY POSITION_INDEPENDENT_CODE ON)

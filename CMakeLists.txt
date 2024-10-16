@@ -7,3 +7,5 @@ set(AngelScript_VERSION "2.37.0" CACHE STRING "AngelScript version to use" )
 
 add_subdirectory(third_party)
 add_subdirectory(src)
+
+add_subdirectory(unit_tests)

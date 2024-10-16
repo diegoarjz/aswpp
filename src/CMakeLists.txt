@@ -2,12 +2,14 @@ add_library(
   aswpp
   SHARED
     script_engine.cpp
+    script_module.cpp
 )
 
 target_include_directories(
   aswpp
-  PRIVATE
+  PUBLIC
     ${CMAKE_SOURCE_DIR}/include
+  PRIVATE
     ${CMAKE_SOURCE_DIR}/third_party/AngelScript/sdk/angelscript/include
     ${CMAKE_SOURCE_DIR}/third_party/AngelScript/sdk/add_on/scriptbuilder
 )
