@@ -1,58 +1,6 @@
-include(ExternalProject)
-
-#----------------------------------------
-# Download and unzip AngelScript
-set(AngelScript_URL
-  "https://www.angelcode.com/angelscript/sdk/files/angelscript_${AngelScript_VERSION}.zip"
-)
-set(AngelScriptZip_DST
-  "${CMAKE_CURRENT_SOURCE_DIR}/angelscript_${AngelScript_VERSION}.zip"
-)
-set(AngelScript_DST
-  "${CMAKE_CURRENT_SOURCE_DIR}/sdk"
-)
-
-add_custom_command(
-  OUTPUT
-    ${AngelScriptZip_DST}
-  COMMAND
-    wget ${AngelScript_URL}
-  WORKING_DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}
-  COMMENT
-    "Downloading ${AngelScript_URL} to ${AngelScriptZip_DST}"
-)
-
-add_custom_command(
-  OUTPUT
-    ${AngelScript_DST}
-  COMMAND
-    COMMAND ${CMAKE_COMMAND} -E tar xzf ${AngelScriptZip_DST}
-  WORKING_DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}
-  COMMENT "Unzipping ${AngelScriptZip_DST}"
-)
-
-add_custom_target(
-  download_AngelScript
-  ALL
-  DEPENDS
-    ${AngelScriptZip_DST}
-    ${AngelScript_DST}
-)
-
 #----------------------------------------
 # Build AngelScript library
-
-# We want to be as flexible as possible with any changes in source files in the
-# zip so we glob everything. We won't be making changes to these files anyway.
-file(GLOB AngelScript_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sdk/angelscript/source/*.cpp)
-add_library(
-  AngelScript
-  STATIC
-    ${AngelScript_SOURCES}
-)
-set_property(TARGET AngelScript PROPERTY POSITION_INDEPENDENT_CODE ON)
+add_subdirectory(sdk/angelscript/projects/cmake)
 
 file(GLOB AngelScript_AddOn_ScriptBuilder_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sdk/add_on/scriptbuilder/*.cpp)
 add_library(

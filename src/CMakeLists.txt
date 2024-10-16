@@ -1,6 +1,6 @@
 add_library(
   aswpp
-  SHARED
+  STATIC
     script_engine.cpp
     script_module.cpp
 )
@@ -17,7 +17,7 @@ target_include_directories(
 target_link_libraries(
   aswpp
   PRIVATE
-    AngelScript
+    angelscript
     AngelScript_ScriptBuilder_AddOn
 )
 
