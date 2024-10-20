@@ -1,7 +1,5 @@
 find_package(GTest REQUIRED)
 
-enable_testing()
-
 add_executable(aswpp_unit_tests
   script_engine.test.cpp
   script_module.test.cpp
