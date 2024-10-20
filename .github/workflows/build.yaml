@@ -1,0 +1,37 @@
+name: Build
+on: push
+
+jobs:
+    build:
+        name: ${{ matrix.config.name }}
+        runs-on: ${{ matrix.config.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                config:
+                - {
+                    name: "Linux",
+                    os: ubuntu-latest,
+                    compiler: "gcc",
+                    build_script: "build.sh"
+                  }
+                - {
+                    name: "macOS",
+                    os: macos-latest,
+                    compiler: "clang",
+                    build_script: "build.sh"
+                  }
+                - {
+                    name: "Windows",
+                    os: windows-latest,
+                    compiler: "msvc",
+                    build_script: "build.bat"
+                  }
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v4
+              with:
+                path: 'aswpp'
+
+            - name: Build
+              run: ${{ github.workspace }}/aswpp/${{ matrix.config.build_script}} ${{ github.workspace }}/aswpp
