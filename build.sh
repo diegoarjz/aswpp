@@ -14,13 +14,6 @@ echo "   build root: ${BUILD_ROOT}"
 echo "########################################"
 
 #----------------------------------------
-# install dependencies
-#----------------------------------------
-python3 -m venv devenv
-source devenv/bin/activate
-pip3 install -r ${aswpp_ROOT}/requirements.txt
-
-#----------------------------------------
 # install conan dependencies
 #----------------------------------------
 git -C ${aswpp_ROOT} submodule update --init --recursive
