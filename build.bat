@@ -12,11 +12,6 @@ echo "   build root: %BUILD_ROOT%"
 echo "########################################"
 
 REM ----------------------------------------
-REM  install dependencies
-REM ----------------------------------------
-pip3 install -r %aswpp_ROOT%/requirements.txt
-
-REM ----------------------------------------
 REM  install conan dependencies
 REM ----------------------------------------
 git -C %aswpp_ROOT% submodule update --init --recursive

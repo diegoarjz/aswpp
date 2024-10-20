@@ -28,14 +28,17 @@ jobs:
                     build_script: "build.bat"
                   }
         steps:
-            - uses: actions/setup-python@v5
-              with:
-                cache: 'pip'
             - name: Check out repository
               uses: actions/checkout@v4
               with:
                 path: 'aswpp'
+            - uses: actions/setup-python@v5
+              with:
+                python-version: '3.12'
+                cache: 'pip'
 
+            - name: Install dependencies
+              run: pip install -r ${{ github.workspace }}/aswpp/requirements.txt --break-system-packages
             - name: Build
               run: ${{ github.workspace }}/aswpp/${{ matrix.config.build_script}} ${{ github.workspace }}/aswpp
             - name: Test
