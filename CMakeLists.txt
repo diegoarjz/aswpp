@@ -3,6 +3,8 @@ project("aswpp" LANGUAGES CXX VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 20)
 
+find_package(magic_enum REQUIRED)
+
 add_subdirectory(third_party)
 add_subdirectory(src)
 

@@ -42,6 +42,7 @@ class ASWPP(ConanFile):
 
     def requirements(self):
         self.requires("gtest/1.15.0")
+        self.requires("magic_enum/0.9.6")
 
     def build(self):
         files.get(self,
