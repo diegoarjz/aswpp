@@ -3,6 +3,7 @@ find_package(GTest REQUIRED)
 add_executable(aswpp_unit_tests
   script_engine.test.cpp
   script_module.test.cpp
+  enum_register.test.cpp
 )
 
 target_link_libraries(

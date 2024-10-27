@@ -58,10 +58,21 @@ public:
     if (!run(moduleName, function)) {
       return false;
     }
-    getReturnValue(ret);
+    if constexpr (std::is_enum<Return>::value) {
+      int64_t returnValue;
+      getReturnValue<int64_t>(&returnValue);
+      *ret = static_cast<Return>(returnValue);
+    }
+    else {
+      getReturnValue(ret);
+    }
     return release();
   }
 
+  //----------------------------------------
+  //! \section Register Enum Methods
+  bool RegisterEnum(const std::string& enumName);
+  bool RegisterEnumValue(const std::string& enumName, const std::string& valueName, int value);
 private:
 
   bool prepare(const std::string& moduleName, const std::string& function);

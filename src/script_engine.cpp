@@ -138,6 +138,17 @@ bool Engine::Attach(const ModulePtr& module) {
   return true;
 }
 
+//----------------------------------------
+//! \section Register Enum Methods
+bool Engine::RegisterEnum(const std::string& enumName) {
+  const int r = m_impl->m_asEngine->RegisterEnum(enumName.c_str());
+  return r >= 0;
+}
+bool Engine::RegisterEnumValue(const std::string& enumName, const std::string& valueName, int value) {
+  const int r = m_impl->m_asEngine->RegisterEnumValue(enumName.c_str(), valueName.c_str(), value);
+  return r >= 0;
+}
+
 bool Engine::prepare(const std::string& moduleName, const std::string& function) {
   return m_impl->prepare(moduleName, function);
 }

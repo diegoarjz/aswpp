@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "aswpp/script_engine.h"
+#include "aswpp/enum_register.h"
 
 using namespace aswpp;
 
@@ -190,7 +191,7 @@ public:
 
 template<typename T>
 void testGettingReturnValue(aswpp::Engine& engine, aswpp::ModulePtr module, const std::string& func, T v) {
-  T value = 123;
+  T value{};
   EXPECT_TRUE(engine.Run("test", func, &value));
   EXPECT_EQ(value, v);
 }
@@ -233,4 +234,33 @@ TEST_F(ScriptEngineGetReturnValueTest, test_get_float) {
 
 TEST_F(ScriptEngineGetReturnValueTest, test_get_double) {
   testGettingReturnValue<double>(m_engine, m_module, "double returnDouble()", 10.1);
+}
+
+//----------------------------------------
+
+class ScriptEngineTestEnumValues : public testing::Test {
+public:
+  void SetUp() override {
+    EnumRegister<TestEnum>(m_engine, "TestEnum");
+    m_module = std::make_shared<aswpp::Module>("test", script);
+    m_engine.Attach(m_module);
+  }
+
+  const std::string script = R"(
+  TestEnum returnValue1() { return TestEnum::Value1; }
+  TestEnum returnValue2() { return TestEnum::Value2; }
+)";
+
+  aswpp::Engine m_engine;
+  aswpp::ModulePtr m_module;
+
+  enum class TestEnum { Value1, Value2 };
+};
+
+TEST_F(ScriptEngineTestEnumValues, test_get_enum_value1) {
+  testGettingReturnValue<TestEnum>(m_engine, m_module, "TestEnum returnValue1()", TestEnum::Value1);
+}
+
+TEST_F(ScriptEngineTestEnumValues, test_get_enum_value) {
+  testGettingReturnValue<TestEnum>(m_engine, m_module, "TestEnum returnValue2()", TestEnum::Value2);
 }

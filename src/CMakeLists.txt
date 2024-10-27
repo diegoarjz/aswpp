@@ -16,6 +16,8 @@ target_include_directories(
 
 target_link_libraries(
   aswpp
+  PUBLIC
+    magic_enum::magic_enum
   PRIVATE
     angelscript
     AngelScript_ScriptBuilder_AddOn
