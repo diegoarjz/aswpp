@@ -1,5 +1,7 @@
 # aswpp
 
+![Build Status](https://github.com/diegoarjz/aswpp/actions/workflows/build.yaml/badge.svg)
+
 [AngelScript](https://www.angelcode.com/angelscript/) Wraper for C++.
 
 Something to make it easier to register the application interface.
