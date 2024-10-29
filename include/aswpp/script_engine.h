@@ -73,6 +73,24 @@ public:
   //! \section Register Enum Methods
   bool RegisterEnum(const std::string& enumName);
   bool RegisterEnumValue(const std::string& enumName, const std::string& valueName, int value);
+
+  template <class R>
+  bool RegisterEnum(const char* enumName) {
+  if (!RegisterEnum(enumName)) {
+    std::cerr << "Error registering enum '" << enumName << "'" << std::endl;
+    return false;
+  }
+
+  for (const auto &v : magic_enum::enum_values<R>()) {
+    const auto enumMemberName = magic_enum::enum_name(v);
+    if (!RegisterEnumValue( enumName, static_cast<std::string>(enumMemberName).c_str(), static_cast<int>(v))) {
+      std::cerr << "Error registering enum member '" << enumName << "::" << enumMemberName << "'" << std::endl;
+      return false;
+    }
+  }
+
+  return true;
+  }
 private:
 
   bool prepare(const std::string& moduleName, const std::string& function);
