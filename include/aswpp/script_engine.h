@@ -102,7 +102,15 @@ public:
     return true;
   }
 
-  return true;
+  //----------------------------------------
+  //! \section Register Free Functions
+
+  //! Registers the function \func as a global function
+  template<typename RetType, typename... Args>
+  bool Register(const char* signature, RetType(*func)(Args...)) {
+    auto asEngine = engine();
+    const int r = asEngine->RegisterGlobalFunction(signature, asFUNCTION(func), asCALL_CDECL);
+    return r > 0;
   }
 private:
 
