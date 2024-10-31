@@ -18,8 +18,8 @@ target_link_libraries(
   aswpp
   PUBLIC
     magic_enum::magic_enum
-  PRIVATE
     angelscript
+  PRIVATE
     AngelScript_ScriptBuilder_AddOn
 )
 
