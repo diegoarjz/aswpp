@@ -1,5 +1,7 @@
 #pragma once
 
+#include "aswpp/class_register.h"
+
 #include "aswpp/script_module.h"
 
 #include "angelscript.h"
@@ -111,6 +113,17 @@ public:
     auto asEngine = engine();
     const int r = asEngine->RegisterGlobalFunction(signature, asFUNCTION(func), asCALL_CDECL);
     return r > 0;
+  }
+
+  //----------------------------------------
+  //! \section Register Classes
+
+  template <class C,
+            class O = RefObjectType<C>,
+            class Ref = RefCountBehaviour<C>,
+            class F = FactoryBehaviour<C>>
+  ClassRegister<C, O, Ref, F> RegisterClass(const char* className) {
+    return ClassRegister<C, O, Ref, F>(engine(), className);
   }
 private:
 

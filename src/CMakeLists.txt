@@ -3,6 +3,7 @@ add_library(
   STATIC
     script_engine.cpp
     script_module.cpp
+    class_register.cpp
 )
 
 target_include_directories(
