@@ -5,6 +5,7 @@ add_executable(aswpp_unit_tests
   script_module.test.cpp
   enum_register.test.cpp
   function_register.test.cpp
+  class_register.test.cpp
 )
 
 target_link_libraries(
