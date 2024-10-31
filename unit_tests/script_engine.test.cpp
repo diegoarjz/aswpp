@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "aswpp/script_engine.h"
-#include "aswpp/enum_register.h"
 
 using namespace aswpp;
 
@@ -241,7 +240,7 @@ TEST_F(ScriptEngineGetReturnValueTest, test_get_double) {
 class ScriptEngineTestEnumValues : public testing::Test {
 public:
   void SetUp() override {
-    EnumRegister<TestEnum>(m_engine, "TestEnum");
+    m_engine.RegisterEnum<TestEnum>("TestEnum");
     m_module = std::make_shared<aswpp::Module>("test", script);
     m_engine.Attach(m_module);
   }

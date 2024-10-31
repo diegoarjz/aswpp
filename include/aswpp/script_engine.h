@@ -2,6 +2,11 @@
 
 #include "aswpp/script_module.h"
 
+#include "angelscript.h"
+
+#include <magic_enum/magic_enum.hpp>
+
+#include <iostream>
 #include <memory>
 
 namespace aswpp {
@@ -59,8 +64,8 @@ public:
       return false;
     }
     if constexpr (std::is_enum<Return>::value) {
-      int64_t returnValue;
-      getReturnValue<int64_t>(&returnValue);
+      int32_t returnValue;
+      getReturnValue<int32_t>(&returnValue);
       *ret = static_cast<Return>(returnValue);
     }
     else {
@@ -71,22 +76,30 @@ public:
 
   //----------------------------------------
   //! \section Register Enum Methods
+
+  //! Registers an enum with \a name
   bool RegisterEnum(const std::string& enumName);
+
+  //! Registers an enum \a value with the \a valueName in the \a enumName enum.
   bool RegisterEnumValue(const std::string& enumName, const std::string& valueName, int value);
 
+  //! Registers the enum \a R with \a enumName and all of its values.
   template <class R>
   bool RegisterEnum(const char* enumName) {
-  if (!RegisterEnum(enumName)) {
-    std::cerr << "Error registering enum '" << enumName << "'" << std::endl;
-    return false;
-  }
-
-  for (const auto &v : magic_enum::enum_values<R>()) {
-    const auto enumMemberName = magic_enum::enum_name(v);
-    if (!RegisterEnumValue( enumName, static_cast<std::string>(enumMemberName).c_str(), static_cast<int>(v))) {
-      std::cerr << "Error registering enum member '" << enumName << "::" << enumMemberName << "'" << std::endl;
+    if (!RegisterEnum(enumName)) {
+      std::cerr << "Error registering enum '" << enumName << "'" << std::endl;
       return false;
     }
+
+    for (const auto &v : magic_enum::enum_values<R>()) {
+      const auto enumMemberName = magic_enum::enum_name(v);
+      if (!RegisterEnumValue( enumName, static_cast<std::string>(enumMemberName).c_str(), static_cast<int>(v))) {
+        std::cerr << "Error registering enum member '" << enumName << "::" << enumMemberName << "'" << std::endl;
+        return false;
+      }
+    }
+
+    return true;
   }
 
   return true;
@@ -101,7 +114,13 @@ private:
 
   template<typename T>
   bool setFunctionArg(int i, T val) {
-    return setFunctionObjectArg(i, &val);
+    if constexpr (std::is_enum<T>::value) {
+      auto r = setFunctionArg<int32_t>(i, static_cast<int64_t>(val));
+      return r;
+    }
+    else {
+      return setFunctionObjectArg(i, &val);
+    }
   }
 
   template<std::size_t Count>
@@ -109,13 +128,15 @@ private:
 
   template <std::size_t Count, class ArgType, class... ArgTypes>
   bool setArgs(ArgType &arg, ArgTypes &...args) {
-    return setArgs<Count>(arg) && setArgs<Count - 1>(args...);
+    return setArgs<Count, ArgType>(arg) && setArgs<Count - 1>(args...);
   }
 
   template <std::size_t Count, class ArgType>
   bool setArgs(ArgType &arg) {
     return setFunctionArg(Count - 1, arg);
   }
+
+  asIScriptEngine* engine();
 
   template<typename T>
   void getReturnValue(T* value);

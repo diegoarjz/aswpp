@@ -6,8 +6,6 @@
 namespace aswpp {
 //----------------------------------------
 // Engine class
-
-
 static void StaticMessageCallback(const asSMessageInfo *msg) {
   switch (msg->type) {
   case asMSGTYPE_ERROR:
@@ -160,6 +158,8 @@ bool Engine::run(const std::string& module, const std::string& function) {
 bool Engine::release() {
   return m_impl->release();
 }
+
+asIScriptEngine* Engine::engine() { return m_impl->m_asEngine; }
 
 namespace {
   void reportSetFunctionError(int error) {
