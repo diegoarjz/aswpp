@@ -43,7 +43,8 @@ public:
       delete ptr;
     } else if (s_referenceCounts[ptr] < 0) {
       std::cout << "--> " << ptr << " <--" << std::endl;
-      std::cerr << "[Script Engine] object released too many times." << std::endl;
+      std::cerr << "[Script Engine] object released too many times."
+                << std::endl;
     }
   }
 
@@ -130,54 +131,96 @@ std::vector<ConstMethodHolder<C, R, Args...> *>
     ConstMethodHolder<C, R, Args...>::s_holders;
 
 //! Return an argument of a specific type form \a gen
-template<typename T>
-T arg(asIScriptGeneric* gen, uint8_t argNum) {
-  return *static_cast<T*>(gen->GetAddressOfArg(argNum));
+template <typename T> T arg(asIScriptGeneric *gen, uint8_t argNum) {
+  return *static_cast<T *>(gen->GetAddressOfArg(argNum));
 }
-template<> int64_t  arg< int64_t>(asIScriptGeneric* gen, uint8_t argNum);
-template<> uint64_t arg<uint64_t>(asIScriptGeneric* gen, uint8_t argNum);
-template<> int32_t  arg< int32_t>(asIScriptGeneric* gen, uint8_t argNum);
-template<> uint32_t arg<uint32_t>(asIScriptGeneric* gen, uint8_t argNum);
-template<> int16_t  arg< int16_t>(asIScriptGeneric* gen, uint8_t argNum);
-template<> uint16_t arg<uint16_t>(asIScriptGeneric* gen, uint8_t argNum);
-template<> int8_t   arg<  int8_t>(asIScriptGeneric* gen, uint8_t argNum);
-template<> uint8_t  arg< uint8_t>(asIScriptGeneric* gen, uint8_t argNum);
-template<> char     arg<    char>(asIScriptGeneric* gen, uint8_t argNum);
-template<> float    arg<   float>(asIScriptGeneric* gen, uint8_t argNum);
-template<> double   arg<  double>(asIScriptGeneric* gen, uint8_t argNum);
+template <> int64_t arg<int64_t>(asIScriptGeneric *gen, uint8_t argNum);
+template <> uint64_t arg<uint64_t>(asIScriptGeneric *gen, uint8_t argNum);
+template <> int32_t arg<int32_t>(asIScriptGeneric *gen, uint8_t argNum);
+template <> uint32_t arg<uint32_t>(asIScriptGeneric *gen, uint8_t argNum);
+template <> int16_t arg<int16_t>(asIScriptGeneric *gen, uint8_t argNum);
+template <> uint16_t arg<uint16_t>(asIScriptGeneric *gen, uint8_t argNum);
+template <> int8_t arg<int8_t>(asIScriptGeneric *gen, uint8_t argNum);
+template <> uint8_t arg<uint8_t>(asIScriptGeneric *gen, uint8_t argNum);
+template <> char arg<char>(asIScriptGeneric *gen, uint8_t argNum);
+template <> float arg<float>(asIScriptGeneric *gen, uint8_t argNum);
+template <> double arg<double>(asIScriptGeneric *gen, uint8_t argNum);
 
 //----------------------------------------
 // Calls methods with a specific number of args
-template<class C, class R>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)()) { return (*object.*fptr)(); }
-template<class C, class R, typename A1>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1)) { return (*object.*fptr)(arg<A1>(gen, 0)); }
-template<class C, class R, typename A1, typename A2>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2)) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1)); }
-template<class C, class R, typename A1, typename A2, typename A3>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2, A3)) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2)); }
-template<class C, class R, typename A1, typename A2, typename A3, typename A4>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2, A3, A4)) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2), arg<A4>(gen, 3)); }
-template<class C, class R, typename A1, typename A2, typename A3, typename A4, typename A5>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2, A3, A4, A5)) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2), arg<A4>(gen, 3), arg<A5>(gen, 4)); }
-template<class C, class R, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2, A3, A4, A5, A6)) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2), arg<A4>(gen, 3), arg<A5>(gen, 4), arg<A6>(gen, 5)); }
+template <class C, class R>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)()) {
+  return (*object.*fptr)();
+}
+template <class C, class R, typename A1>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)(A1)) {
+  return (*object.*fptr)(arg<A1>(gen, 0));
+}
+template <class C, class R, typename A1, typename A2>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)(A1, A2)) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1));
+}
+template <class C, class R, typename A1, typename A2, typename A3>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)(A1, A2, A3)) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2));
+}
+template <class C, class R, typename A1, typename A2, typename A3, typename A4>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)(A1, A2, A3, A4)) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2),
+                         arg<A4>(gen, 3));
+}
+template <class C, class R, typename A1, typename A2, typename A3, typename A4,
+          typename A5>
+R callMethod(asIScriptGeneric *gen, C *object,
+             R (C::*fptr)(A1, A2, A3, A4, A5)) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2),
+                         arg<A4>(gen, 3), arg<A5>(gen, 4));
+}
+template <class C, class R, typename A1, typename A2, typename A3, typename A4,
+          typename A5, typename A6>
+R callMethod(asIScriptGeneric *gen, C *object,
+             R (C::*fptr)(A1, A2, A3, A4, A5, A6)) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2),
+                         arg<A4>(gen, 3), arg<A5>(gen, 4), arg<A6>(gen, 5));
+}
 
 // Const versions
-template<class C, class R>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)() const) { return (*object.*fptr)(); }
-template<class C, class R, typename A1>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1) const) { return (*object.*fptr)(arg<A1>(gen, 0)); }
-template<class C, class R, typename A1, typename A2>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2) const) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1)); }
-template<class C, class R, typename A1, typename A2, typename A3>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2, A3) const) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2)); }
-template<class C, class R, typename A1, typename A2, typename A3, typename A4>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2, A3, A4) const) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2), arg<A4>(gen, 3)); }
-template<class C, class R, typename A1, typename A2, typename A3, typename A4, typename A5>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2, A3, A4, A5) const) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2), arg<A4>(gen, 3), arg<A5>(gen, 4)); }
-template<class C, class R, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
-R callMethod(asIScriptGeneric* gen, C* object, R (C::* fptr)(A1, A2, A3, A4, A5, A6) const) { return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2), arg<A4>(gen, 3), arg<A5>(gen, 4), arg<A6>(gen, 5)); }
+template <class C, class R>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)() const) {
+  return (*object.*fptr)();
+}
+template <class C, class R, typename A1>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)(A1) const) {
+  return (*object.*fptr)(arg<A1>(gen, 0));
+}
+template <class C, class R, typename A1, typename A2>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)(A1, A2) const) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1));
+}
+template <class C, class R, typename A1, typename A2, typename A3>
+R callMethod(asIScriptGeneric *gen, C *object, R (C::*fptr)(A1, A2, A3) const) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2));
+}
+template <class C, class R, typename A1, typename A2, typename A3, typename A4>
+R callMethod(asIScriptGeneric *gen, C *object,
+             R (C::*fptr)(A1, A2, A3, A4) const) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2),
+                         arg<A4>(gen, 3));
+}
+template <class C, class R, typename A1, typename A2, typename A3, typename A4,
+          typename A5>
+R callMethod(asIScriptGeneric *gen, C *object,
+             R (C::*fptr)(A1, A2, A3, A4, A5) const) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2),
+                         arg<A4>(gen, 3), arg<A5>(gen, 4));
+}
+template <class C, class R, typename A1, typename A2, typename A3, typename A4,
+          typename A5, typename A6>
+R callMethod(asIScriptGeneric *gen, C *object,
+             R (C::*fptr)(A1, A2, A3, A4, A5, A6) const) {
+  return (*object.*fptr)(arg<A1>(gen, 0), arg<A2>(gen, 1), arg<A3>(gen, 2),
+                         arg<A4>(gen, 3), arg<A5>(gen, 4), arg<A6>(gen, 5));
+}
 
 template <class C, typename R, typename... Args>
 void GenericCreateFromValue(asIScriptGeneric *gen) {
@@ -200,7 +243,8 @@ void ConstGenericCreateFromValue(asIScriptGeneric *gen) {
 
   // Cast the object to the actual class
   C *object = static_cast<C *>(gen->GetObject());
-  auto holder = static_cast<ConstMethodHolder<C, R, Args...> *>(gen->GetAuxiliary());
+  auto holder =
+      static_cast<ConstMethodHolder<C, R, Args...> *>(gen->GetAuxiliary());
   Fptr_t fptr = holder->GetFptr();
   R ret = callMethod<C, R, Args...>(gen, object, fptr);
 
@@ -257,7 +301,8 @@ public:
             asCALL_THISCALL) >= 0;
 
     if (!m_valid) {
-      std::cerr << "Error registering method '" << decl << "' of class '" << m_className << "'" << std::endl;
+      std::cerr << "Error registering method '" << decl << "' of class '"
+                << m_className << "'" << std::endl;
     }
 
     return *this;
@@ -277,7 +322,8 @@ public:
             asCALL_THISCALL) >= 0;
 
     if (!m_valid) {
-      std::cerr << "Error registering method '" << decl << "' of class '" << m_className << "'" << std::endl;
+      std::cerr << "Error registering method '" << decl << "' of class '"
+                << m_className << "'" << std::endl;
     }
 
     return *this;
@@ -297,7 +343,8 @@ public:
         asCALL_GENERIC, methodHolder);
 
     if (!m_valid) {
-      std::cerr << "Error registering method '" << decl << "' of class '" << m_className << "'" << std::endl;
+      std::cerr << "Error registering method '" << decl << "' of class '"
+                << m_className << "'" << std::endl;
     }
 
     return *this;
@@ -314,38 +361,38 @@ public:
     auto methodHolder = ConstMethodHolder<C, R, Args...>::Create(f);
 
     m_valid |= m_engine->RegisterObjectMethod(
-        m_className, decl, asFUNCTION((ConstGenericCreateFromValue<C, R, Args...>)),
+        m_className, decl,
+        asFUNCTION((ConstGenericCreateFromValue<C, R, Args...>)),
         asCALL_GENERIC, methodHolder);
 
     if (!m_valid) {
-      std::cerr << "Error registering method '" << decl << "' of class '" << m_className << "'" << std::endl;
+      std::cerr << "Error registering method '" << decl << "' of class '"
+                << m_className << "'" << std::endl;
     }
 
     return *this;
   }
 
   template <typename V>
-  ClassRegister &RegisterObjectProperty(const char *decl, V C::* propPtr)
-  {
+  ClassRegister &RegisterObjectProperty(const char *decl, V C::*propPtr) {
     if (!m_valid) {
       return *this;
     }
 
-    m_valid |= m_engine->RegisterObjectProperty(m_className, decl, member_offset(propPtr));
+    m_valid |= m_engine->RegisterObjectProperty(m_className, decl,
+                                                member_offset(propPtr));
 
     return *this;
   }
+
 private:
   asIScriptEngine *m_engine;
   const char *m_className;
   bool m_valid{false};
 
-  template<typename U>
-  std::ptrdiff_t member_offset(U C::* member)
-  {
+  template <typename U> std::ptrdiff_t member_offset(U C::*member) {
     return reinterpret_cast<std::ptrdiff_t>(
-      &(reinterpret_cast<C const volatile*>(NULL)->*member)
-    );
+        &(reinterpret_cast<C const volatile *>(NULL)->*member));
   }
 };
-}
+} // namespace aswpp

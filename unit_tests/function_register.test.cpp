@@ -5,14 +5,13 @@
 using namespace aswpp;
 
 namespace {
-  float test_free_function(float val) {
-    return val * 2;
-  }
-}
+float test_free_function(float val) { return val * 2; }
+} // namespace
 
 TEST(FunctionRegisterTeset, should_be_able_to_register_function) {
   Engine e;
-  EXPECT_TRUE(e.Register("float test_free_function(float)", test_free_function));
+  EXPECT_TRUE(
+      e.Register("float test_free_function(float)", test_free_function));
 }
 
 TEST(FunctionRegisterTeset, should_be_able_to_call_registerd_function) {

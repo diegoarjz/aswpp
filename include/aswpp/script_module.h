@@ -11,26 +11,26 @@ class asScriptEngineHandle;
 class Module {
 public:
   //! Creates a module with a source and name.
-  Module(const std::string& name, const std::string& source);
+  Module(const std::string &name, const std::string &source);
 
   ~Module();
 
   //! Returns the \a Module name.
-  const std::string& GetName() const;
+  const std::string &GetName() const;
 
   //! Returns the \a Module source.
-  const std::string& GetSource() const;
+  const std::string &GetSource() const;
 
   std::size_t GetFunctionCount() const;
 
   bool IsAttached() const;
 
-  template<typename VarType>
-  bool GetGlobalVar(const std::string& name, VarType* var) const {
-    if (void* addr = getGlobalVarAddress(name)) {
+  template <typename VarType>
+  bool GetGlobalVar(const std::string &name, VarType *var) const {
+    if (void *addr = getGlobalVarAddress(name)) {
 
       if (var != nullptr) {
-        *var = *static_cast<VarType*>(addr);
+        *var = *static_cast<VarType *>(addr);
       }
 
       return true;
@@ -39,11 +39,11 @@ public:
   }
 
 private:
-  void* getGlobalVarAddress(const std::string& name) const;
+  void *getGlobalVarAddress(const std::string &name) const;
 
-  void attachTo(Engine* engine);
+  void attachTo(Engine *engine);
 
-  bool prepareModule(asScriptEngineHandle* handle);
+  bool prepareModule(asScriptEngineHandle *handle);
 
   class Impl;
   std::unique_ptr<Impl> m_impl;
@@ -52,4 +52,4 @@ private:
 };
 using ModulePtr = std::shared_ptr<Module>;
 
-}
+} // namespace aswpp

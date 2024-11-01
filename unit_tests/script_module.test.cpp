@@ -73,7 +73,8 @@ TEST(ScriptModuleTest, getting_global_var_should_be_able_to_retrive_value) {
   EXPECT_EQ(value, 123);
 }
 
-TEST(ScriptModuleTest, getting_global_var_should_return_false_if_var_doesnt_exist) {
+TEST(ScriptModuleTest,
+     getting_global_var_should_return_false_if_var_doesnt_exist) {
   const std::string script = R"(
   int value = 0;
 )";

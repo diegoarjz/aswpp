@@ -11,7 +11,8 @@ TEST(EnumRegisterTest, should_be_able_to_register_an_enum) {
   EXPECT_TRUE(e.RegisterEnum<TestEnum>("TestEnum"));
 }
 
-TEST(EnumRegisterTest, should_not_be_able_to_register_an_enum_with_duplicate_name) {
+TEST(EnumRegisterTest,
+     should_not_be_able_to_register_an_enum_with_duplicate_name) {
   enum class TestOtherEnum { value1, value2 };
   Engine e;
   EXPECT_TRUE(e.RegisterEnum<TestEnum>("TestEnum"));

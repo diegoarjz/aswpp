@@ -113,8 +113,9 @@ public:
   aswpp::ModulePtr m_module;
 };
 
-template<typename T>
-void testSettingFunctionArg(aswpp::Engine& engine, aswpp::ModulePtr module, const std::string& func, const std::string& value) {
+template <typename T>
+void testSettingFunctionArg(aswpp::Engine &engine, aswpp::ModulePtr module,
+                            const std::string &func, const std::string &value) {
   T v = 1;
   EXPECT_TRUE(engine.Run("test", func, v));
   T outValue = 0;
@@ -123,43 +124,53 @@ void testSettingFunctionArg(aswpp::Engine& engine, aswpp::ModulePtr module, cons
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_long_arg) {
-  testSettingFunctionArg<int64_t>(m_engine, m_module, "void main(int64)", "int64Value");
+  testSettingFunctionArg<int64_t>(m_engine, m_module, "void main(int64)",
+                                  "int64Value");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_ulong_arg) {
-  testSettingFunctionArg<uint64_t>(m_engine, m_module, "void main(uint64)", "uint64Value");
+  testSettingFunctionArg<uint64_t>(m_engine, m_module, "void main(uint64)",
+                                   "uint64Value");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_int_arg) {
-  testSettingFunctionArg<int32_t>(m_engine, m_module, "void main(int)", "intValue");
+  testSettingFunctionArg<int32_t>(m_engine, m_module, "void main(int)",
+                                  "intValue");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_uint_arg) {
-  testSettingFunctionArg<uint32_t>(m_engine, m_module, "void main(uint)", "uintValue");
+  testSettingFunctionArg<uint32_t>(m_engine, m_module, "void main(uint)",
+                                   "uintValue");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_short_arg) {
-  testSettingFunctionArg<int16_t>(m_engine, m_module, "void main(int16)", "shortValue");
+  testSettingFunctionArg<int16_t>(m_engine, m_module, "void main(int16)",
+                                  "shortValue");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_ushort_arg) {
-  testSettingFunctionArg<uint16_t>(m_engine, m_module, "void main(uint16)", "ushortValue");
+  testSettingFunctionArg<uint16_t>(m_engine, m_module, "void main(uint16)",
+                                   "ushortValue");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_byte_arg) {
-  testSettingFunctionArg<int8_t>(m_engine, m_module, "void main(int8)", "byteValue");
+  testSettingFunctionArg<int8_t>(m_engine, m_module, "void main(int8)",
+                                 "byteValue");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_ubyte_arg) {
-  testSettingFunctionArg<uint8_t>(m_engine, m_module, "void main(uint8)", "ubyteValue");
+  testSettingFunctionArg<uint8_t>(m_engine, m_module, "void main(uint8)",
+                                  "ubyteValue");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_float_arg) {
-  testSettingFunctionArg<float>(m_engine, m_module, "void main(float)", "floatValue");
+  testSettingFunctionArg<float>(m_engine, m_module, "void main(float)",
+                                "floatValue");
 }
 
 TEST_F(ScriptEngineSetArgsTest, set_double_arg) {
-  testSettingFunctionArg<double>(m_engine, m_module, "void main(double)", "doubleValue");
+  testSettingFunctionArg<double>(m_engine, m_module, "void main(double)",
+                                 "doubleValue");
 }
 
 //----------------------------------------
@@ -188,8 +199,9 @@ public:
   aswpp::ModulePtr m_module;
 };
 
-template<typename T>
-void testGettingReturnValue(aswpp::Engine& engine, aswpp::ModulePtr module, const std::string& func, T v) {
+template <typename T>
+void testGettingReturnValue(aswpp::Engine &engine, aswpp::ModulePtr module,
+                            const std::string &func, T v) {
   T value{};
   EXPECT_TRUE(engine.Run("test", func, &value));
   EXPECT_EQ(value, v);
@@ -208,7 +220,8 @@ TEST_F(ScriptEngineGetReturnValueTest, test_get_int16) {
 }
 
 TEST_F(ScriptEngineGetReturnValueTest, test_get_uint16) {
-  testGettingReturnValue<uint16_t>(m_engine, m_module, "uint16 returnUInt16()", 6);
+  testGettingReturnValue<uint16_t>(m_engine, m_module, "uint16 returnUInt16()",
+                                   6);
 }
 
 TEST_F(ScriptEngineGetReturnValueTest, test_get_int8) {
@@ -224,7 +237,8 @@ TEST_F(ScriptEngineGetReturnValueTest, test_get_int64) {
 }
 
 TEST_F(ScriptEngineGetReturnValueTest, test_get_uint64) {
-  testGettingReturnValue<uint8_t>(m_engine, m_module, "uint64 returnUInt64()", 2);
+  testGettingReturnValue<uint8_t>(m_engine, m_module, "uint64 returnUInt64()",
+                                  2);
 }
 
 TEST_F(ScriptEngineGetReturnValueTest, test_get_float) {
@@ -232,7 +246,8 @@ TEST_F(ScriptEngineGetReturnValueTest, test_get_float) {
 }
 
 TEST_F(ScriptEngineGetReturnValueTest, test_get_double) {
-  testGettingReturnValue<double>(m_engine, m_module, "double returnDouble()", 10.1);
+  testGettingReturnValue<double>(m_engine, m_module, "double returnDouble()",
+                                 10.1);
 }
 
 //----------------------------------------
@@ -257,9 +272,11 @@ public:
 };
 
 TEST_F(ScriptEngineTestEnumValues, test_get_enum_value1) {
-  testGettingReturnValue<TestEnum>(m_engine, m_module, "TestEnum returnValue1()", TestEnum::Value1);
+  testGettingReturnValue<TestEnum>(m_engine, m_module,
+                                   "TestEnum returnValue1()", TestEnum::Value1);
 }
 
 TEST_F(ScriptEngineTestEnumValues, test_get_enum_value) {
-  testGettingReturnValue<TestEnum>(m_engine, m_module, "TestEnum returnValue2()", TestEnum::Value2);
+  testGettingReturnValue<TestEnum>(m_engine, m_module,
+                                   "TestEnum returnValue2()", TestEnum::Value2);
 }

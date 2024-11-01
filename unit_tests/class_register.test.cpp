@@ -13,17 +13,13 @@ public:
 
 class TestClass {
 public:
-  TestClass() {
-    ++ctorCount;
-  }
+  TestClass() { ++ctorCount; }
   TestClass(float value) : m_value{value} {}
 
   void setValue(float val) { m_value = val; }
   float value() const { return m_value; }
 
-  TestClass2 getObject() const {
-    return TestClass2{};
-  }
+  TestClass2 getObject() const { return TestClass2{}; }
 
   TestClass2 getObjectWithValue(float value) const {
     TestClass2 t2;
@@ -37,13 +33,9 @@ public:
     return t2;
   }
 
-  float setValueWithObject(TestClass2 t) {
-    return t.m_value;
-  }
+  float setValueWithObject(TestClass2 t) { return t.m_value; }
 
-  float setValueWithReferenceObject(TestClass2& t) {
-    return t.m_value;
-  }
+  float setValueWithReferenceObject(TestClass2 &t) { return t.m_value; }
 
   float m_value{123.0f};
 
@@ -55,18 +47,25 @@ class ClassRegisterTest : public ::testing::Test {
 public:
   void SetUp() override {
     e.RegisterClass<TestClass2>("TestClass2")
-      .RegisterObjectMethod("float value() const", &TestClass2::value)
-      .RegisterObjectProperty("float m_value", &TestClass2::m_value);
+        .RegisterObjectMethod("float value() const", &TestClass2::value)
+        .RegisterObjectProperty("float m_value", &TestClass2::m_value);
     e.RegisterClass<TestClass>("TestClass")
-      .RegisterObjectMethod("float value() const", &TestClass::value)
-      .RegisterObjectMethod("void setValue(float)", &TestClass::setValue)
-      .RegisterValueObjectMethod("TestClass2@ getObject()", &TestClass::getObject)
-      .RegisterValueObjectMethod("TestClass2@ getObjectWithValue(float) const", &TestClass::getObjectWithValue)
-      .RegisterValueObjectMethod("TestClass2@ getObjectWithMultipleValues(float, float)", &TestClass::getObjectWithMultipleValues)
-      .RegisterValueObjectMethod("float setValueWithObject(const TestClass2@)", &TestClass::setValueWithObject)
-      //.RegisterValueObjectMethod("float setValueWithReferenceObject(const TestClass2@)", &TestClass::setValueWithReferenceObject)
-      .RegisterObjectProperty("float m_value", &TestClass::m_value)
-      ;
+        .RegisterObjectMethod("float value() const", &TestClass::value)
+        .RegisterObjectMethod("void setValue(float)", &TestClass::setValue)
+        .RegisterValueObjectMethod("TestClass2@ getObject()",
+                                   &TestClass::getObject)
+        .RegisterValueObjectMethod(
+            "TestClass2@ getObjectWithValue(float) const",
+            &TestClass::getObjectWithValue)
+        .RegisterValueObjectMethod(
+            "TestClass2@ getObjectWithMultipleValues(float, float)",
+            &TestClass::getObjectWithMultipleValues)
+        .RegisterValueObjectMethod(
+            "float setValueWithObject(const TestClass2@)",
+            &TestClass::setValueWithObject)
+        //.RegisterValueObjectMethod("float setValueWithReferenceObject(const
+        //TestClass2@)", &TestClass::setValueWithReferenceObject)
+        .RegisterObjectProperty("float m_value", &TestClass::m_value);
     e.CreateModule("test", R"(
     void main() {
       TestClass t;
@@ -140,13 +139,15 @@ TEST_F(ClassRegisterTest, should_be_able_to_call_methods_that_return_objects) {
   EXPECT_EQ(value, 221.0f);
 }
 
-TEST_F(ClassRegisterTest, should_be_able_to_call_methods_with_args_that_return_objects) {
+TEST_F(ClassRegisterTest,
+       should_be_able_to_call_methods_with_args_that_return_objects) {
   float value = 0.0f;
   e.Run("test", "float call_method_return_object_with_arg()", &value);
   EXPECT_EQ(value, 456.0f);
 }
 
-TEST_F(ClassRegisterTest, should_be_able_to_call_methods_with_multiple_args_that_return_objects) {
+TEST_F(ClassRegisterTest,
+       should_be_able_to_call_methods_with_multiple_args_that_return_objects) {
   float value = 0.0f;
   e.Run("test", "float call_method_return_object_with_multiple_args()", &value);
   EXPECT_EQ(value, 305);
