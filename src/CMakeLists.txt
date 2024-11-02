@@ -13,6 +13,7 @@ target_include_directories(
   PRIVATE
     ${CMAKE_SOURCE_DIR}/third_party/AngelScript/sdk/angelscript/include
     ${CMAKE_SOURCE_DIR}/third_party/AngelScript/sdk/add_on/scriptbuilder
+    ${CMAKE_SOURCE_DIR}/third_party/AngelScript/sdk/add_on/scriptstdstring
 )
 
 target_link_libraries(
@@ -22,6 +23,7 @@ target_link_libraries(
     angelscript
   PRIVATE
     AngelScript_ScriptBuilder_AddOn
+    AngelScript_ScriptStdString_AddOn
 )
 
 set(aswpp_public_headers

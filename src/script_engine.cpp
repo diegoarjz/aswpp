@@ -1,7 +1,9 @@
 #include "aswpp/script_engine.h"
 
-#include "scriptbuilder.h"
+#include "scriptstdstring.h"
+
 #include <iostream>
+#include <map>
 
 namespace aswpp {
 //----------------------------------------
@@ -43,6 +45,8 @@ public:
       m_asEngine->ShutDownAndRelease();
       m_asEngine = nullptr;
     }
+
+    RegisterStdString(m_asEngine);
   }
 
   ~Impl() {
