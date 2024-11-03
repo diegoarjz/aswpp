@@ -1,6 +1,7 @@
 # aswpp
 
 ![Build Status](https://github.com/diegoarjz/aswpp/actions/workflows/build.yaml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/diegoarjz/aswpp/badge.svg?branch=main)](https://coveralls.io/github/diegoarjz/aswpp?branch=main)
 
 [AngelScript](https://www.angelcode.com/angelscript/) Wraper for C++.
 
