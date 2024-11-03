@@ -14,10 +14,12 @@ class ASWPP(ConanFile):
         "build_type=Release"
     )
     options = {
-        "AngelScriptVersion": ["ANY"]
+        "AngelScriptVersion": ["ANY"],
+        "with_coverage": [True, False]
     }
     default_options = {
-        "AngelScriptVersion": "2.37.0"
+        "AngelScriptVersion": "2.37.0",
+        "with_coverage": False
     }
     generators = (
         "CMakeDeps",
@@ -49,5 +51,8 @@ class ASWPP(ConanFile):
                   url=self.angel_script_url,
                   destination=self.angel_script_dest_dir)
         cmake = CMake(self)
-        cmake.configure()
+        variables = {
+            "WITH_COVERAGE": self.options.with_coverage
+        }
+        cmake.configure(variables=variables)
         cmake.build()

@@ -1,0 +1,57 @@
+name: Code Coverage
+on: push
+
+permissions:
+  contents: read
+
+jobs:
+  coverage:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          path: 'aswpp'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r ${{ github.workspace }}/aswpp/requirements.txt --break-system-packages
+          pip install gcovr
+      - name: Build
+        run: |
+          conan install                                                                    \
+                ${{ github.workspace }}/aswpp/                                             \
+                -of ${{ github.workspace}}/build                                           \
+                --build=missing                                                            \
+                --profile:host=${{ github.workspace }}/aswpp/tools/profiles/linux_Rel.txt  \
+                --profile:build=${{ github.workspace }}/aswpp/tools/profiles/linux_Rel.txt \
+                -s build_type=Debug
+          conan build                                                                      \
+                ${{ github.workspace }}/aswpp/                                             \
+                -of ${{ github.workspace}}/build                                           \
+                --profile:host=${{ github.workspace }}/aswpp/tools/profiles/linux_Rel.txt  \
+                --profile:build=${{ github.workspace }}/aswpp/tools/profiles/linux_Rel.txt \
+                -s build_type=Debug                                                        \
+                -o with_coverage=True
+      - name: Run Tests
+        run: |
+          ${{ github.workspace }}/build/unit_tests/aswpp_unit_tests
+      - name: Check Test Coverage
+        run: |
+          gcovr --exclude build --exclude aswpp/third_party --coveralls ${{ github.workspace }}/coveralls.json
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          file: ${{ github.workspace }}/coveralls.json
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Results
+          path: .
