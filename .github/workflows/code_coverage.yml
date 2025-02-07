@@ -26,24 +26,30 @@ jobs:
         run: |
           conan install                                                                    \
                 ${{ github.workspace }}/aswpp/                                             \
-                -of ${{ github.workspace}}/build                                           \
+                -of ${{ github.workspace}}/aswpp/build                                     \
                 --build=missing                                                            \
                 --profile:host=${{ github.workspace }}/aswpp/tools/profiles/linux_Rel.txt  \
                 --profile:build=${{ github.workspace }}/aswpp/tools/profiles/linux_Rel.txt \
                 -s build_type=Debug
           conan build                                                                      \
                 ${{ github.workspace }}/aswpp/                                             \
-                -of ${{ github.workspace}}/build                                           \
+                -of ${{ github.workspace}}/aswpp/build                                     \
                 --profile:host=${{ github.workspace }}/aswpp/tools/profiles/linux_Rel.txt  \
                 --profile:build=${{ github.workspace }}/aswpp/tools/profiles/linux_Rel.txt \
                 -s build_type=Debug                                                        \
                 -o with_coverage=True
       - name: Run Tests
         run: |
-          ${{ github.workspace }}/build/unit_tests/aswpp_unit_tests
+          ${{ github.workspace }}/aswpp/build/unit_tests/aswpp_unit_tests
       - name: Check Test Coverage
         run: |
-          gcovr --exclude build --exclude aswpp/third_party --coveralls ${{ github.workspace }}/coveralls.json
+          pushd ${{ github.workspace }}/aswpp
+          gcovr --root ${{ github.workspace }}/aswpp/               \
+                --exclude ${{ github.workspace }}/aswpp/build       \
+                --exclude third_party                               \
+                --coveralls ${{ github.workspace }}/coveralls.json  \
+                ${{ github.workspace }}/aswpp
+          popd
       - name: Coveralls
         uses: coverallsapp/github-action@v2
         with:

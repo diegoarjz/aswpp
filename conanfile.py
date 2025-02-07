@@ -1,5 +1,5 @@
 from conan import ConanFile
-from conan.tools.cmake import CMake
+from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps
 from conan.tools import files
 import pathlib
 
@@ -21,20 +21,12 @@ class ASWPP(ConanFile):
         "AngelScriptVersion": "2.37.0",
         "with_coverage": False
     }
-    generators = (
-        "CMakeDeps",
-        "CMakeToolchain"
-    )
+
+    exports_sources = "CMakeLists.txt", "src/*", "include/*", "third_party/*", "examples/*", "unit_tests/*"
 
     @property
     def angel_script_version(self):
         return str(self.options.AngelScriptVersion)
-
-
-    @property
-    def angel_script_url(self):
-        version = self.angel_script_version
-        return f"https://www.angelcode.com/angelscript/sdk/files/angelscript_{version}.zip"
 
 
     @property
@@ -46,13 +38,24 @@ class ASWPP(ConanFile):
         self.requires("gtest/1.15.0")
         self.requires("magic_enum/0.9.6")
 
+    def generate(self):
+        tc = CMakeToolchain(self)
+        tc.generate()
+        deps = CMakeDeps(self)
+        deps.generate()
+
     def build(self):
-        files.get(self,
-                  url=self.angel_script_url,
-                  destination=self.angel_script_dest_dir)
+        self._configure_cmake().build()
+
+    def package(self):
+        self._configure_cmake().install()
+
+
+    def _configure_cmake(self):
         cmake = CMake(self)
         variables = {
-            "WITH_COVERAGE": self.options.with_coverage
+            "WITH_COVERAGE": self.options.with_coverage,
+            "Angelscript_VERSION": self.angel_script_version
         }
         cmake.configure(variables=variables)
-        cmake.build()
+        return cmake

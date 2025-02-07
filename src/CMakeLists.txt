@@ -11,16 +11,15 @@ target_include_directories(
   PUBLIC
     ${CMAKE_SOURCE_DIR}/include
   PRIVATE
-    ${CMAKE_SOURCE_DIR}/third_party/AngelScript/sdk/angelscript/include
-    ${CMAKE_SOURCE_DIR}/third_party/AngelScript/sdk/add_on/scriptbuilder
-    ${CMAKE_SOURCE_DIR}/third_party/AngelScript/sdk/add_on/scriptstdstring
+    ${Angelscript_PATH}/sdk/add_on/scriptbuilder
+    ${Angelscript_PATH}/sdk/add_on/scriptstdstring
 )
 
 target_link_libraries(
   aswpp
   PUBLIC
     magic_enum::magic_enum
-    angelscript
+    Angelscript::angelscript
   PRIVATE
     AngelScript_ScriptBuilder_AddOn
     AngelScript_ScriptStdString_AddOn
