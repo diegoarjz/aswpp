@@ -306,6 +306,10 @@ template <> bool Engine::setFunctionArg<bool>(int i, bool val) {
   return r == asSUCCESS;
 }
 
+template <> bool Engine::setFunctionArg<std::string>(int i, std::string val) {
+  return setFunctionObjectArg(i, &val);
+}
+
 bool Engine::setFunctionObjectArg(int i, void *val) {
   const int r = m_impl->m_context->SetArgObject(i, val);
   if (r != asSUCCESS) {
@@ -368,5 +372,9 @@ template <> void Engine::getReturnValue(double *value) {
 
 template <> void Engine::getReturnValue(bool *value) {
   *value = m_impl->m_context->GetReturnByte();
+}
+
+template <> void Engine::getReturnValue(std::string *value) {
+  *value = *static_cast<std::string*>(m_impl->m_context->GetReturnObject());
 }
 } // namespace aswpp

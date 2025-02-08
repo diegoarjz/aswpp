@@ -113,6 +113,11 @@ public:
     boolValue = v;
   }
 
+  string stringValue = "";
+  void main(string v) {
+    stringValue = v;
+  }
+
 )";
 
   aswpp::Engine m_engine;
@@ -188,6 +193,15 @@ TEST_F(ScriptEngineSetArgsTest, set_bool_arg) {
   EXPECT_EQ(outValue, 1);
 }
 
+TEST_F(ScriptEngineSetArgsTest, set_string_arg) {
+  std::string v = "";
+  std::string newVal = "newVal";
+  EXPECT_TRUE(m_engine.Run("test", "void main(string)", newVal));
+  std::string outValue = "";
+  m_module->GetGlobalVar("stringValue", &outValue);
+  EXPECT_EQ(outValue, "newVal");
+}
+
 //----------------------------------------
 
 class ScriptEngineGetReturnValueTest : public testing::Test {
@@ -209,6 +223,7 @@ public:
   float returnFloat() { return 9.1; }
   double returnDouble() { return 10.1; }
   bool returnBool() { return true; }
+  string returnString() { return "stringVal"; }
 )";
 
   aswpp::Engine m_engine;
@@ -265,11 +280,16 @@ TEST_F(ScriptEngineGetReturnValueTest, test_get_double) {
   testGettingReturnValue<double>(m_engine, m_module, "double returnDouble()",
                                  10.1);
 }
+
 TEST_F(ScriptEngineGetReturnValueTest, test_get_bool) {
   testGettingReturnValue<bool>(m_engine, m_module, "bool returnBool()",
                                true);
 }
 
+TEST_F(ScriptEngineGetReturnValueTest, test_get_string) {
+  testGettingReturnValue<std::string>(m_engine, m_module, "string returnString()",
+                                     "stringVal");
+}
 //----------------------------------------
 
 class ScriptEngineTestEnumValues : public testing::Test {
