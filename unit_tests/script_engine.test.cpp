@@ -107,6 +107,12 @@ public:
   void main(double v) {
     doubleValue = v;
   }
+
+  bool boolValue = false;
+  void main(bool v) {
+    boolValue = v;
+  }
+
 )";
 
   aswpp::Engine m_engine;
@@ -173,6 +179,15 @@ TEST_F(ScriptEngineSetArgsTest, set_double_arg) {
                                  "doubleValue");
 }
 
+TEST_F(ScriptEngineSetArgsTest, set_bool_arg) {
+  bool v = false;
+  bool newVal = true;
+  EXPECT_TRUE(m_engine.Run("test", "void main(bool)", newVal));
+  bool outValue = 0;
+  m_module->GetGlobalVar("boolValue", &outValue);
+  EXPECT_EQ(outValue, 1);
+}
+
 //----------------------------------------
 
 class ScriptEngineGetReturnValueTest : public testing::Test {
@@ -193,6 +208,7 @@ public:
   uint8 returnUInt8() { return 8; }
   float returnFloat() { return 9.1; }
   double returnDouble() { return 10.1; }
+  bool returnBool() { return true; }
 )";
 
   aswpp::Engine m_engine;
@@ -248,6 +264,10 @@ TEST_F(ScriptEngineGetReturnValueTest, test_get_float) {
 TEST_F(ScriptEngineGetReturnValueTest, test_get_double) {
   testGettingReturnValue<double>(m_engine, m_module, "double returnDouble()",
                                  10.1);
+}
+TEST_F(ScriptEngineGetReturnValueTest, test_get_bool) {
+  testGettingReturnValue<bool>(m_engine, m_module, "bool returnBool()",
+                               true);
 }
 
 //----------------------------------------

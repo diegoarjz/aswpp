@@ -36,11 +36,11 @@ public:
     m_asEngine->SetMessageCallback(asFUNCTION(StaticMessageCallback), nullptr,
                                    asCALL_CDECL);
 
-    /*
     if (r == asINVALID_ARG) {
+      std::cerr << "invalid arg" << std::endl;
     } else if (r == asNOT_SUPPORTED) {
+      std::cerr << "not supported arg" << std::endl;
     }
-    */
 
     m_context = m_asEngine->CreateContext();
 
@@ -94,7 +94,11 @@ public:
     return true;
   }
 
-  bool release() { return m_context->Release() == 0; }
+  bool release() { 
+    const auto result = m_context->Release() == 0;
+    m_context = nullptr;
+    return result;
+  }
 
   Engine &m_scriptEngine;
   asIScriptEngine *m_asEngine{nullptr};
@@ -104,7 +108,9 @@ public:
 
 Engine::Engine() : m_impl(std::make_unique<Engine::Impl>(*this)) {}
 
-Engine::~Engine() {}
+Engine::~Engine() {
+  release();
+}
 
 bool Engine::IsValid() const { return m_impl->m_asEngine != nullptr; }
 
@@ -290,8 +296,28 @@ template <> bool Engine::setFunctionArg<double>(int i, double val) {
   return r == asSUCCESS;
 }
 
+template <> bool Engine::setFunctionArg<bool>(int i, bool val) {
+  const int r = m_impl->m_context->SetArgByte(i, val);
+  if (r != asSUCCESS) {
+    std::cerr << "Unable to set argument " << i << " to value at address "
+              << val << std::endl;
+    reportSetFunctionError(r);
+  }
+  return r == asSUCCESS;
+}
+
 bool Engine::setFunctionObjectArg(int i, void *val) {
   const int r = m_impl->m_context->SetArgObject(i, val);
+  if (r != asSUCCESS) {
+    std::cerr << "Unable to set argument " << i << " to value at address "
+              << val << std::endl;
+    reportSetFunctionError(r);
+  }
+  return r == asSUCCESS;
+}
+
+bool Engine::setFunctionObjectArg(int i, const void *val) {
+  const int r = m_impl->m_context->SetArgObject(i, const_cast<void*>(val));
   if (r != asSUCCESS) {
     std::cerr << "Unable to set argument " << i << " to value at address "
               << val << std::endl;
@@ -338,5 +364,9 @@ template <> void Engine::getReturnValue(float *value) {
 
 template <> void Engine::getReturnValue(double *value) {
   *value = m_impl->m_context->GetReturnDouble();
+}
+
+template <> void Engine::getReturnValue(bool *value) {
+  *value = m_impl->m_context->GetReturnByte();
 }
 } // namespace aswpp

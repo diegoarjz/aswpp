@@ -134,14 +134,11 @@ private:
   bool release();
 
   bool setFunctionObjectArg(int i, void *val);
+  bool setFunctionObjectArg(int i, const void *val);
 
   template <typename T> bool setFunctionArg(int i, T val) {
-    if constexpr (std::is_enum<T>::value) {
-      auto r = setFunctionArg<int32_t>(i, static_cast<int64_t>(val));
-      return r;
-    } else {
-      return setFunctionObjectArg(i, &val);
-    }
+    auto r = setFunctionArg<int32_t>(i, static_cast<int64_t>(val));
+    return r;
   }
 
   template <std::size_t Count> bool setArgs() { return true; }
@@ -152,7 +149,12 @@ private:
   }
 
   template <std::size_t Count, class ArgType> bool setArgs(ArgType &arg) {
-    return setFunctionArg(Count - 1, arg);
+    if constexpr (std::is_scalar<ArgType>::value) {
+      return setFunctionArg(Count - 1, arg);
+    }
+    else {
+      return setFunctionObjectArg(Count - 1, &arg);
+    }
   }
 
   asIScriptEngine *engine();
@@ -176,6 +178,7 @@ template <> bool Engine::setFunctionArg<uint8_t>(int i, uint8_t val);
 template <> bool Engine::setFunctionArg<char>(int i, char val);
 template <> bool Engine::setFunctionArg<float>(int i, float val);
 template <> bool Engine::setFunctionArg<double>(int i, double val);
+template <> bool Engine::setFunctionArg<bool>(int i, bool val);
 
 template <> void Engine::getReturnValue(int64_t *value);
 template <> void Engine::getReturnValue(uint64_t *value);
@@ -187,4 +190,5 @@ template <> void Engine::getReturnValue(int8_t *value);
 template <> void Engine::getReturnValue(uint8_t *value);
 template <> void Engine::getReturnValue(float *value);
 template <> void Engine::getReturnValue(double *value);
+template <> void Engine::getReturnValue(bool *value);
 } // namespace aswpp
