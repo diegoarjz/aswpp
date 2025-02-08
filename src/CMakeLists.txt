@@ -9,7 +9,7 @@ add_library(
 target_include_directories(
   aswpp
   PUBLIC
-    ${CMAKE_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/include
   PRIVATE
     ${Angelscript_PATH}/sdk/add_on/scriptbuilder
     ${Angelscript_PATH}/sdk/add_on/scriptstdstring
