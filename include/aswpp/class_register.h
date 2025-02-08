@@ -308,6 +308,24 @@ public:
     return *this;
   }
 
+  template <typename R, typename... Args>
+  ClassRegister &RegisterObjectMethodWrapped(const char *decl, R(*f)(Args...)) {
+    if (!m_valid) {
+      return *this;
+    }
+
+    m_valid |=
+      m_engine->RegisterObjectMethod(
+          m_className, decl, asFUNCTION(f), asCALL_CDECL_OBJLAST);
+
+    if (!m_valid) {
+      std::cerr << "Error registering method '" << decl << "' of class '"
+                << m_className << "' with wrapper" << std::endl;
+    }
+
+    return *this;
+  }
+
   // Const method version
   template <typename R, typename... Args>
   ClassRegister &RegisterObjectMethod(const char *decl,
