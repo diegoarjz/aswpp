@@ -50,7 +50,7 @@ public:
     if (!run(moduleName, function)) {
       return false;
     }
-    return release();
+    return true;
   }
 
   //! Runs the given function with the arguments and the return value.
@@ -73,7 +73,7 @@ public:
     } else {
       getReturnValue(ret);
     }
-    return release();
+    return true;
   }
 
   //----------------------------------------
