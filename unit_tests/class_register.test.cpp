@@ -164,3 +164,35 @@ TEST_F(ClassRegisterTest, should_be_able_to_call_methods_with_objects) {
   e.Run("test", "float set_value_with_object(void)", &value);
   EXPECT_EQ(value, 123.0f);
 }
+
+
+float AccessTheDouble(TestClass* t) {
+  return 2 * t->value();
+}
+
+class ClassRegisterWithWrapper : public ::testing::Test {
+public:
+  void SetUp() override {
+    e.RegisterClass<TestClass>("TestClass")
+      .RegisterObjectMethod("void setValue(float)",
+          &TestClass::setValue)
+      .RegisterObjectMethodWrapped("float doubleValue() const",
+          &AccessTheDouble);
+
+    e.CreateModule("test", R"(
+      float call_wrapped_methods() {
+        TestClass t;
+        t.setValue(2);
+        return t.doubleValue();
+      }
+    )");
+  }
+
+  Engine e;
+};
+
+TEST_F(ClassRegisterWithWrapper, test_calling_wrapped_methods) {
+  float value = 0.0f;
+  e.Run("test", "float call_wrapped_methods(void)", &value);
+  EXPECT_EQ(value, 4);
+}
