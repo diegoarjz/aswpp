@@ -6,6 +6,7 @@ using namespace aswpp;
 
 namespace {
 float test_free_function(float val) { return val * 2; }
+std::string test_free_function_string_arg(std::string val) { return val; }
 } // namespace
 
 TEST(FunctionRegisterTeset, should_be_able_to_register_function) {
@@ -28,4 +29,26 @@ TEST(FunctionRegisterTeset, should_be_able_to_call_registerd_function) {
   e.Run("test", "float main(float)", &ret, v);
 
   EXPECT_EQ(ret, 4);
+}
+
+
+TEST(FunctionRegisterTeset, should_be_able_to_register_function_string_arg) {
+  Engine e;
+  EXPECT_TRUE(
+      e.Register("string test_free_function_string_arg(string)", test_free_function_string_arg));
+}
+
+TEST(FunctionRegisterTeset, should_be_able_to_call_registerd_function_string_arg) {
+  Engine e;
+  e.Register("string test_free_function_string_arg(string)", test_free_function_string_arg);
+
+  std::string ret;
+  e.CreateModule("test", R"(
+  string main() {
+    return test_free_function_string_arg("abcd");
+  }
+  )");
+  e.Run("test", "string main()", &ret);
+
+  EXPECT_EQ(ret, "abcd");
 }
